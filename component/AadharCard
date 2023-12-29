@@ -1,0 +1,58 @@
+import React, { useState } from 'react';
+
+interface AadharCardProps {
+  id: number;
+  name: string;
+  aadharNo: string;
+  onDelete: (id: number) => void;
+  onUpdate: (id: number, newName: string, newAadharNo: string) => void;
+}
+
+const AadharCard: React.FC<AadharCardProps> = ({ id, name, aadharNo, onDelete, onUpdate }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [newName, setNewName] = useState(name);
+  const [newAadharNo, setNewAadharNo] = useState(aadharNo);
+
+  const handleUpdate = () => {
+    onUpdate(id, newName, newAadharNo);
+    setIsEditing(false);
+  };
+
+  return (
+    <div className="border p-4 mb-4">
+      <p>ID: {id}</p>
+      {isEditing ? (
+        <div>
+          <input
+            type="text"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            className="mb-2 p-2 border"
+          />
+          <input
+            type="text"
+            value={newAadharNo}
+            onChange={(e) => setNewAadharNo(e.target.value)}
+            className="mb-2 p-2 border"
+          />
+          <button onClick={handleUpdate} className="p-2 bg-green-500 text-white">
+            Update
+          </button>
+        </div>
+      ) : (
+        <div>
+          <p>Name: {name}</p>
+          <p>Aadhar No: {aadharNo}</p>
+          <button onClick={() => onDelete(id)} className="p-2 bg-red-500 text-white">
+            Delete
+          </button>
+          <button onClick={() => setIsEditing(true)} className="p-2 bg-blue-500 text-white">
+            Edit
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AadharCard;
