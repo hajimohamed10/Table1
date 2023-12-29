@@ -1,0 +1,75 @@
+'use client';
+import { useState } from 'react';
+import AadharCard from '../components/AadharCard';
+
+interface AadharData {
+  id: number;
+  name: string;
+  aadharNo: string;
+}
+
+const AadharCardList: React.FC = () => {
+  const [aadharList, setAadharList] = useState<AadharData[]>([]);
+  const [newName, setNewName] = useState('');
+  const [newAadharNo, setNewAadharNo] = useState('');
+
+  const handleAdd = () => {
+    const newAadhar: AadharData = {
+      id: Date.now(),
+      name: newName,
+      aadharNo: newAadharNo,
+    };
+    setAadharList([...aadharList, newAadhar]);
+    setNewName('');
+    setNewAadharNo('');
+  };
+
+  const handleDelete = (id: number) => {
+    const updatedList = aadharList.filter((item) => item.id !== id);
+    setAadharList(updatedList);
+  };
+
+  const handleUpdate = (id: number, newName: string, newAadharNo: string) => {
+    const updatedList = aadharList.map((item) =>
+      item.id === id ? { ...item, name: newName, aadharNo: newAadharNo } : item
+    );
+    setAadharList(updatedList);
+  };
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-4xl font-bold mb-4">Aadhar Card List</h1>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Name"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          className="p-2 border"
+        />
+        <input
+          type="text"
+          placeholder="Aadhar No"
+          value={newAadharNo}
+          onChange={(e) => setNewAadharNo(e.target.value)}
+          className="p-2 border"
+        />
+        <button onClick={handleAdd} className="p-2 bg-blue-500 text-white">
+          Add New
+        </button>
+      </div>
+      {aadharList.map((aadhar) => (
+        <AadharCard
+          key={aadhar.id}
+          id={aadhar.id}
+          name={aadhar.name}
+          aadharNo={aadhar.aadharNo}
+          onDelete={handleDelete}
+          onUpdate={handleUpdate}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default AadharCardList;
